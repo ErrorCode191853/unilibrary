@@ -17,5 +17,9 @@ public class LoginController {
         modelAndView.setViewName("login");
         return modelAndView;
     }
+    @GetMapping("/home")
+    public String home() {
+        return "home"; // Returns home.html after successful login
+    }
 }
 
