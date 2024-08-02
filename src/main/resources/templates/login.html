@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Login</title>
-    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <link rel="stylesheet" type="text/css" href="/css/styles.css">
 </head>
 <body>
 <div class="login-container">
@@ -25,6 +25,10 @@
     <div th:if="${param.logout}" class="info">
         You have been logged out successfully.
     </div>
+    <div th:if="${param.registered}" class="success">
+        Registration successful! Please log in.
+    </div>
+    <p>Don't have an account? <a href="/register">Register here</a></p>
 </div>
 </body>
 </html>

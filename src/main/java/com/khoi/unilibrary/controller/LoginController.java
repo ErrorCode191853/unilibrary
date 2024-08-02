@@ -11,11 +11,20 @@ import org.springframework.web.servlet.ModelAndView;
 //@RequestMapping(value = "/account")
 public class LoginController {
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public ModelAndView loadForm() {
-        ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("login");
-        return modelAndView;
+//    @RequestMapping(value = "/login", method = RequestMethod.GET)
+//    public ModelAndView loadForm() {
+//        ModelAndView modelAndView = new ModelAndView();
+//        modelAndView.setViewName("login");
+//        return modelAndView;
+//    }
+@GetMapping("/login")
+public String login() {
+    return "login"; // Returns login.html
+}
+
+    @GetMapping("/home")
+    public String home() {
+        return "home"; // Returns home.html after successful login
     }
 }
 
