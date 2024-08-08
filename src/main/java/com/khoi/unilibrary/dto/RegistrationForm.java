@@ -1,11 +1,13 @@
 package com.khoi.unilibrary.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Data
 public class RegistrationForm {
 
     @NotEmpty(message = "Username is required")
@@ -17,5 +19,5 @@ public class RegistrationForm {
     @NotEmpty(message = "Confirm Password is required")
     private String confirmPassword;
 
-    // Getters and setters
 }
+
