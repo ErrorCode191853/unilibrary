@@ -21,11 +21,6 @@ public class LoginController {
 public String login() {
     return "login"; // Returns login.html
 }
-
-    @GetMapping("/home")
-    public String home() {
-        return "home"; // Returns home.html after successful login
-    }
     @GetMapping("/home")
     public String home() {
         return "home"; // Returns home.html after successful login

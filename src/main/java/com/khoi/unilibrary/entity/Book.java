@@ -3,7 +3,6 @@ package com.khoi.unilibrary.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -27,4 +26,13 @@ public class Book {
     @JoinColumn(name = "user_id")
     private User borrowedBy;
 
+    public boolean isBorrowed() {
+        return borrowed;
+    }
+
+    public void setBorrowedBy(User user) {
+    }
+
+    public void setBorrowed(boolean borrowed) {
+    }
 }
