@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="base :: content">
+<body>
+<section>
+    <h2>Welcome, Admin <span th:text="${user.fullName}">Admin</span>!</h2>
+    <div class="quick-links">
+        <h3>Quick Links</h3>
+        <ul>
+            <li><a th:href="@{/admin/students}">Manage Students</a></li>
+            <li><a th:href="@{/admin/books}">Manage Books</a></li>
+            <li><a th:href="@{/admin/categories}">Manage Categories</a></li>
+            <li><a th:href="@{/admin/staff}">Manage Staff</a></li>
+        </ul>
+    </div>
+    <div class="statistics">
+        <h3>Library Statistics</h3>
+        <ul>
+            <li>Total Books: <span th:text="${totalBooks}">0</span></li>
+            <li>Total Students: <span th:text="${totalStudents}">0</span></li>
+            <li>Total Staff Members: <span th:text="${totalStaff}">0</span></li>
+        </ul>
+    </div>
+    <div class="recent-activity">
+        <h3>Recent Activity</h3>
+        <ul>
+            <li th:each="activity : ${recentActivities}">
+                <span th:text="${activity.message}"></span>
+            </li>
+        </ul>
+    </div>
+</section>
+</body>
+</html>

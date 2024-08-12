@@ -45,4 +45,46 @@ public class UserService {
     public User save(User user) {
         return user;
     }
+
+    public Optional<User> findStudentById(Long id) {
+        return userRepository.findById(id);
+    }
+
+    public void createStudent(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));  // Encode the initial password
+        user.setRole("STUDENT");
+        user.setActive(true);
+        userRepository.save(user);
+    }
+
+    public void updateStudent(User user) {
+        Optional<User> existingUser = userRepository.findById(user.getId());
+        if (existingUser.isPresent()) {
+            User updateUser = existingUser.get();
+            updateUser.setEmail(user.getEmail());
+            updateUser.setFullName(user.getFullName());
+            // Update other fields as needed (excluding personal information)
+            userRepository.save(updateUser);
+        }
+    }
+
+    public void deleteStudent(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public void resetPassword(Long id, String newPassword) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            User resetUser = user.get();
+            resetUser.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(resetUser);
+        }
+    }
+    public long countStudents() {
+        return userRepository.countByRole("STUDENT");
+    }
+
+    public long countStaff() {
+        return userRepository.countByRole("STAFF");
+    }
 }

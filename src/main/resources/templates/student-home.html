@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="base :: content">
+<body>
+<section>
+    <h2>Welcome, <span th:text="${user.fullName}">Student</span>!</h2>
+    <div class="quick-links">
+        <h3>Quick Links</h3>
+        <ul>
+            <li><a th:href="@{/books/search}">Search Books</a></li>
+            <li><a th:href="@{/books/borrowed}">View Borrowed Books</a></li>
+            <li><a th:href="@{/profile}">Manage Personal Information</a></li>
+            <li><a th:href="@{/reset-password}">Reset Password</a></li>
+        </ul>
+    </div>
+    <div class="borrowed-books">
+        <h3>Your Borrowed Books</h3>
+        <ul>
+            <li th:each="book : ${borrowedBooks}">
+                <span th:text="${book.title}">Book Title</span> - Due: <span th:text="${book.dueDate}">Due Date</span>
+                <a th:href="@{/books/extend/{id}(id=${book.id})}">Extend</a> |
+                <a th:href="@{/books/return/{id}(id=${book.id})}">Return</a>
+            </li>
+        </ul>
+    </div>
+    <div class="notifications">
+        <h3>Notifications</h3>
+        <p th:if="${notifications.isEmpty()}">No new notifications.</p>
+        <ul th:if="${!notifications.isEmpty()}">
+            <li th:each="notification : ${notifications}">
+                <span th:text="${notification.message}"></span>
+            </li>
+        </ul>
+    </div>
+</section>
+</body>
+</html>

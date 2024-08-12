@@ -13,26 +13,16 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
     private String author;
-    private String publisher;
-    private Date yearPublished;
-    private Long volumeUp;
-    private String genre;
+
+    @Column(nullable = false)
     private String category;
-    private String keyword;
-    private boolean borrowed;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User borrowedBy;
 
-    public boolean isBorrowed() {
-        return borrowed;
-    }
-
-    public void setBorrowedBy(User user) {
-    }
-
-    public void setBorrowed(boolean borrowed) {
-    }
+    @Column(nullable = false, unique = true)
+    private String isbn;
 }
