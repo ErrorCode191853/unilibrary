@@ -1,6 +1,7 @@
 package com.khoi.unilibrary.controller;
 
 import com.khoi.unilibrary.entity.Book;
+import com.khoi.unilibrary.entity.User;
 import com.khoi.unilibrary.service.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,7 @@ public class BookController {
     @PutMapping("/{id}")
     public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
         // Additional logic to ensure you're updating the correct book
-        return bookService.save(book);
+        return bookService.saveBook(book);
     }
 
     @DeleteMapping("/{id}")
@@ -54,8 +55,8 @@ public class BookController {
     }
 
     @PostMapping("/{bookId}/return")
-    public ResponseEntity<Book> returnBook(@PathVariable Long bookId) {
-        Book returnedBook = bookService.returnBook(bookId);
+    public ResponseEntity<Book> returnBook(@PathVariable Book book) {
+        Book returnedBook = bookService.returnBook(book);
         if (returnedBook != null) {
             return ResponseEntity.ok(returnedBook);
         } else {

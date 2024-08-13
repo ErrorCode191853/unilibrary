@@ -3,6 +3,7 @@ package com.khoi.unilibrary.service;
 
 import com.khoi.unilibrary.entity.User;
 import com.khoi.unilibrary.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,13 +14,10 @@ import static org.springframework.security.core.userdetails.User.withUsername;
 
 
 @Service
+@RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
 
     private final UserRepository userRepository;
-
-    public CustomUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -32,5 +30,15 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         return builder.build();
     }
-}
 
+    public UserDetails loadUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found w/ userID: " + userId));
+
+        UserBuilder builder = withUsername(user.getUsername());
+        builder.password(user.getPassword());
+        builder.roles(user.getRole());
+
+        return builder.build();
+    }
+}

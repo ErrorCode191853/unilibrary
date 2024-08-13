@@ -1,17 +1,20 @@
 package com.khoi.unilibrary.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 
-    private Long id;
+    private Long userId;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -30,9 +33,4 @@ public class User {
 
     @Column(nullable = false)
     private boolean active;
-//    private Long userID;
-//    private Long id;
-//    private String username;
-//    private String password;
-//    private String role = "USER";
 }

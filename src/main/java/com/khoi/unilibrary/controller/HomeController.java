@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,10 +25,10 @@ public class HomeController {
     @GetMapping("/home")
     public String home(Model model, Authentication authentication) {
         String username = authentication.getName();
-        User user = userService.findByUsername(username);
+        Optional<User> user = userService.findByUsername(username);
         model.addAttribute("user", user);
 
-        switch (user.getRole()) {
+        switch (user.get().getRole()) {
             case "ADMIN":
                 model.addAttribute("totalBooks", bookService.countBooks());
                 model.addAttribute("totalStudents", userService.countStudents());
@@ -35,8 +36,8 @@ public class HomeController {
                 model.addAttribute("recentActivities", getRecentActivities());
                 return "admin-home";
             case "STUDENT":
-                model.addAttribute("borrowedBooks", bookService.findBorrowedBooksByUser(user.getId()));
-                model.addAttribute("notifications", getNotifications(user));
+                model.addAttribute("borrowedBooks", bookService.findBorrowedBooksByUser(user.get().getUserId()));
+                model.addAttribute("notifications", getNotifications(user.orElse(null)));
                 return "student-home";
             default:
                 // Log unknown role or handle it accordingly

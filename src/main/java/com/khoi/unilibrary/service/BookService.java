@@ -1,31 +1,34 @@
 package com.khoi.unilibrary.service;
 
 import com.khoi.unilibrary.entity.Book;
+import com.khoi.unilibrary.entity.Borrow;
 import com.khoi.unilibrary.entity.User;
 import com.khoi.unilibrary.repository.BookRepository;
+import com.khoi.unilibrary.repository.BookRepositoryImpl;
 import com.khoi.unilibrary.repository.BorrowRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class BookService {
 
     private final BorrowRepository borrowRepository;
     private final BookRepository bookRepository;
-
-    public BookService(BookRepository bookRepository, BorrowRepository borrowRepository) {
-        this.bookRepository = bookRepository;
-        this.borrowRepository = borrowRepository;
-    }
+    private final CustomUserDetailsService customUserDetailsService;
+    private final BookRepositoryImpl bookRepositoryImpl;
 
     public List<Book> findAllBooks() {
         return bookRepository.findAll();
@@ -50,11 +53,10 @@ public class BookService {
         return bookRepository.findById(id).orElse(null);
     }
 
-    public void deleteBook(Long id) {
+    public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
 
-    public void delete
 
     public void importBooksFromCsv(String filePath) throws IOException {
         try (Reader reader = new FileReader(filePath);
@@ -77,9 +79,15 @@ public class BookService {
             saveBooks(books);
         }
     }
-    public void borrowBook(Long bookId, User user) {
+
+    public Book borrowBook(Long bookId, Long userId) {
         Book book = bookRepository.findById(bookId).orElseThrow(() -> new RuntimeException("Book not found"));
 
+        UserDetails userDetails = customUserDetailsService.loadUserById(userId);
+        User user = User.builder()
+                .username(userDetails.getUsername())
+                .userId(userId)
+                .build();
         // Check if there are available copies
         if (book.getAvailableCopies() > 0) {
             // Reduce the number of available copies
@@ -96,6 +104,7 @@ public class BookService {
         } else {
             throw new RuntimeException("No available copies of the book");
         }
+        return book;
     }
 
     public long countBooks() {
@@ -103,6 +112,10 @@ public class BookService {
     }
 
     public List<Book> findBorrowedBooksByUser(Long userId) {
-        return bookRepository.findBorrowedBooksByUserId(userId);
+        return bookRepositoryImpl.findBorrowedBooksByUserId(userId);
+    }
+
+    public Book returnBook(Book book) {
+        return book;
     }
 }

@@ -9,6 +9,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
+@Table(name = "book")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +26,7 @@ public class Book {
 
     @Column(nullable = false, unique = true)
     private String isbn;
+
+    @Column(nullable = false)
+    private Integer availableCopies;
 }

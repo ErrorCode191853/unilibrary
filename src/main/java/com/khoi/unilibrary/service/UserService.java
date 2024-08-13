@@ -46,8 +46,8 @@ public class UserService {
         return user;
     }
 
-    public Optional<User> findStudentById(Long id) {
-        return userRepository.findById(id);
+    public Optional<User> findStudentById(Long userId) {
+        return userRepository.findById(userId);
     }
 
     public void createStudent(User user) {
@@ -58,7 +58,7 @@ public class UserService {
     }
 
     public void updateStudent(User user) {
-        Optional<User> existingUser = userRepository.findById(user.getId());
+        Optional<User> existingUser = userRepository.findById(user.getUserId());
         if (existingUser.isPresent()) {
             User updateUser = existingUser.get();
             updateUser.setEmail(user.getEmail());
@@ -68,12 +68,12 @@ public class UserService {
         }
     }
 
-    public void deleteStudent(Long id) {
-        userRepository.deleteById(id);
+    public void deleteStudent(Long userId) {
+        userRepository.deleteById(userId);
     }
 
-    public void resetPassword(Long id, String newPassword) {
-        Optional<User> user = userRepository.findById(id);
+    public void resetPassword(Long userId, String newPassword) {
+        Optional<User> user = userRepository.findById(userId);
         if (user.isPresent()) {
             User resetUser = user.get();
             resetUser.setPassword(passwordEncoder.encode(newPassword));
