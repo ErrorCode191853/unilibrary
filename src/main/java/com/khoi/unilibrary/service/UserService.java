@@ -13,18 +13,15 @@ import java.util.Optional;
 @Service
 public class UserService {
     @Autowired
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private  UserRepository userRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void saveUser(RegistrationForm form) {
         User user = new User();
         user.setUsername(form.getUsername());
         user.setPassword(passwordEncoder.encode(form.getPassword()));
+        user.setEmail(form.getEmail());
         user.setRole("STUDENT"); // Assign role based on logic
         userRepository.save(user);
     }

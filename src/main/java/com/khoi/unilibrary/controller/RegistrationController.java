@@ -1,7 +1,6 @@
 package com.khoi.unilibrary.controller;
 
 import com.khoi.unilibrary.dto.RegistrationForm;
-import com.khoi.unilibrary.entity.User;
 import com.khoi.unilibrary.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
@@ -27,23 +26,27 @@ public class RegistrationController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@ModelAttribute("registrationForm") @Valid RegistrationForm form, BindingResult result, Model model) {
+    public String registerUser(@ModelAttribute("registrationForm") @Valid RegistrationForm form, BindingResult result, Model model) throws Exception {
         if (result.hasErrors()) {
             return "register";
         }
+        try {
+            if (!form.getPassword().equals(form.getConfirmPassword())) {
+                model.addAttribute("passwordMismatch", "Passwords do not match");
+                return "register";
+            }
 
-        if (!form.getPassword().equals(form.getConfirmPassword())) {
-            model.addAttribute("passwordMismatch", "Passwords do not match");
-            return "register";
+            if (userService.findByUsername(form.getUsername()).isPresent()) {
+                model.addAttribute("userExists", "Username already exists");
+                return "register";
+            }
+
+            userService.saveUser(form);
+            return "redirect:/login?registered";
+        }catch(Exception e) {
+            throw new Exception(e);
         }
-
-        if (userService.findByUsername(form.getUsername()).isPresent()) {
-            model.addAttribute("userExists", "Username already exists");
-            return "register";
-        }
-
-        userService.saveUser(form);
-        return "redirect:/login?registered";
     }
+
 }
 
