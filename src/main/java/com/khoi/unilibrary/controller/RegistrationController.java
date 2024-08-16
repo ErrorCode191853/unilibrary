@@ -1,7 +1,7 @@
 package com.khoi.unilibrary.controller;
 
 import com.khoi.unilibrary.dto.RegistrationForm;
-import com.khoi.unilibrary.service.UserService;
+import com.khoi.unilibrary.service.UserServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class RegistrationController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
-    public RegistrationController(UserService userService) {
+    public RegistrationController(UserServiceImpl userService) {
         this.userService = userService;
     }
 

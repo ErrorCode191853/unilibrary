@@ -1,8 +1,9 @@
 package com.khoi.unilibrary.controller;
 
-import com.khoi.unilibrary.entity.User;
+import com.khoi.unilibrary.model.User;
 import com.khoi.unilibrary.service.BookService;
-import com.khoi.unilibrary.service.UserService;
+import com.khoi.unilibrary.service.UserServiceImpl;
+import jakarta.annotation.security.RolesAllowed;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,10 +17,11 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@RolesAllowed("ADMIN")
 public class AdminController {
 
     private final BookService bookService;
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @GetMapping("/books")
     public String listBooks(Model model) {

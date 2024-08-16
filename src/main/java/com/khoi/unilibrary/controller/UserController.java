@@ -1,7 +1,7 @@
 package com.khoi.unilibrary.controller;
 
-import com.khoi.unilibrary.entity.User;
-import com.khoi.unilibrary.service.UserService;
+import com.khoi.unilibrary.model.User;
+import com.khoi.unilibrary.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,7 +11,7 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @GetMapping
     public List<User> getAllUsers() {

@@ -1,7 +1,7 @@
 package com.khoi.unilibrary.service;
 
 
-import com.khoi.unilibrary.entity.User;
+import com.khoi.unilibrary.model.User;
 import com.khoi.unilibrary.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

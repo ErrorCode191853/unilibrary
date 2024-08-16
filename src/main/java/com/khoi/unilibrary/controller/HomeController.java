@@ -1,9 +1,9 @@
 package com.khoi.unilibrary.controller;
 
-import com.khoi.unilibrary.entity.User;
+import com.khoi.unilibrary.model.User;
 import com.khoi.unilibrary.model.Activity;
 import com.khoi.unilibrary.model.Notification;
-import com.khoi.unilibrary.service.UserService;
+import com.khoi.unilibrary.service.UserServiceImpl;
 import com.khoi.unilibrary.service.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
     private final BookService bookService;
 
     @GetMapping("/home")

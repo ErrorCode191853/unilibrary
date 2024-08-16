@@ -1,7 +1,7 @@
 package com.khoi.unilibrary;
 
-import com.khoi.unilibrary.entity.User;
-import com.khoi.unilibrary.service.UserService;
+import com.khoi.unilibrary.model.User;
+import com.khoi.unilibrary.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -11,10 +11,10 @@ import java.util.List;
 @Component
 public class AppStartupRunner implements CommandLineRunner {
 
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public AppStartupRunner(UserService userService) {
+    public AppStartupRunner(UserServiceImpl userService) {
         this.userService = userService;
     }
 

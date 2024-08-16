@@ -1,4 +1,4 @@
-package com.khoi.unilibrary.entity;
+package com.khoi.unilibrary.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;

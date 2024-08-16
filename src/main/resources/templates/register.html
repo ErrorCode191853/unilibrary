@@ -19,6 +19,11 @@
             <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
         </div>
         <div class="form-group">
+            <label for="fullName">Full name:</label>
+            <input type="text" id="fullName" th:field="*{fullName}" required>
+            <div th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+        </div>
+        <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" id="password" th:field="*{password}" required>
             <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>

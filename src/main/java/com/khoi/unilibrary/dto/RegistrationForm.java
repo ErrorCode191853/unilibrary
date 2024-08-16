@@ -13,6 +13,9 @@ public class RegistrationForm {
     @NotEmpty(message = "Username is required")
     private String username;
 
+    @NotEmpty(message = "Full name is required")
+    private String fullName;
+
     @NotEmpty(message = "Password is required")
     private String password;
 

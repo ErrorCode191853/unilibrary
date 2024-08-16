@@ -1,0 +1,34 @@
+package com.khoi.unilibrary.model;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+@Entity
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "author")
+public class Author {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
+    private Integer id;
+
+    @Column(name = "first_name")
+    @NotNull(message = "first_name shouldn't be null")
+    private String firstName;
+
+    @Column(name = "last_name")
+    @NotNull(message = "last_name shouldn't be null")
+    private String lastName;
+
+    public Author(String firstName, String lastName) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+}

@@ -1,9 +1,10 @@
 package com.khoi.unilibrary.controller;
 
-import com.khoi.unilibrary.entity.Book;
-import com.khoi.unilibrary.entity.User;
+import com.khoi.unilibrary.model.Book;
 import com.khoi.unilibrary.service.BookService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
