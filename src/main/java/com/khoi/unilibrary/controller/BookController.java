@@ -1,67 +1,121 @@
 package com.khoi.unilibrary.controller;
 
-import com.khoi.unilibrary.model.Book;
+import com.khoi.unilibrary.dto.BookPayload;
+import com.khoi.unilibrary.model.enums.Status;
+import com.khoi.unilibrary.repository.BookRepository;
+import com.khoi.unilibrary.repository.WorkRepository;
 import com.khoi.unilibrary.service.BookService;
-import jakarta.annotation.security.RolesAllowed;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Role;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.view.RedirectView;
 
-import java.util.List;
+import java.sql.Date;
+import java.text.ParseException;
+import java.util.ArrayList;
 
-@RestController
-@RequestMapping("/api/books")
+@Controller
+@RequestMapping("/books")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
+
+    private final BookRepository bookRepository;
+
+    private final WorkRepository workRepository;
+
+    public BookController(BookService bookService, BookRepository bookRepository, WorkRepository workRepository) {
+        this.bookService = bookService;
+        this.bookRepository = bookRepository;
+        this.workRepository = workRepository;
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'LIBRARIAN')")
+    @GetMapping("/add")
+    public String addNewBook(Model model, BookPayload bookPayload) {
+        var works = workRepository.findAll();
+
+        var statusList = new ArrayList<String>();
+        statusList.add(Status.OK.name());
+        statusList.add(Status.LOST.name());
+        statusList.add(Status.DAMAGED.name());
+
+        model.addAttribute("bookPayload", bookPayload);
+        model.addAttribute("workOptions", works);
+        model.addAttribute("statusList", statusList);
+
+        return "book/addNewBook";
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'LIBRARIAN')")
+    @PostMapping("/saveBook")
+    public RedirectView saveNewBook(@ModelAttribute("bookPayload") BookPayload bookPayload) throws ParseException {
+        var book = bookService.createBook(bookPayload);
+        bookRepository.save(book);
+
+        return new RedirectView("/books");
+    }
 
     @GetMapping
-    public List<Book> getAllBooks() {
-        return bookService.findAllBooks();
+    public String getAllBooks(Model model, @RequestParam(required = false) String keyword, @RequestParam(required = false) String statusName, @RequestParam(defaultValue = "1") int page, @RequestParam(defaultValue = "3") int size) {
+        var pageBooks = bookService.getAllBooks(keyword, statusName, page, size);
+        var books = pageBooks.getContent();
+        var statusOptions = Status.values();
+
+        model.addAttribute("books", books);
+        model.addAttribute("statusOptions", statusOptions);
+
+        model.addAttribute("currentPage", pageBooks.getNumber() + 1);
+        model.addAttribute("totalItems", pageBooks.getTotalElements());
+        model.addAttribute("totalPages", pageBooks.getTotalPages());
+        model.addAttribute("pageSize", size);
+
+        if (keyword != null) model.addAttribute("keyword", keyword);
+        if (statusName != null) model.addAttribute("statusName", statusName);
+
+        return "book/allBooks";
     }
 
-    @GetMapping("/{id}")
-    public Book getBook(@PathVariable Long id) {
-        return bookService.findBookById(id);
-    }
-
-    @PostMapping
-    public Book addBook(@RequestBody Book book) {
-        return bookService.saveBook(book);
-    }
-
-    @PutMapping("/{id}")
-    public Book updateBook(@PathVariable Long id, @RequestBody Book book) {
-        // Additional logic to ensure you're updating the correct book
-        return bookService.saveBook(book);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteBook(@PathVariable Long id) {
-        bookService.deleteById(id);
-    }
-
-    // ... other endpoints ...
-
-    @PostMapping("/{bookId}/borrow/{userId}")
-    public ResponseEntity<Book> borrowBook(@PathVariable Long bookId, @PathVariable Long userId) {
-        Book borrowedBook = bookService.borrowBook(bookId, userId);
-        if (borrowedBook != null) {
-            return ResponseEntity.ok(borrowedBook);
-        } else {
-            return ResponseEntity.badRequest().build(); // or a more descriptive error response
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/{id}/delete")
+    public String deleteBook(@PathVariable("id") Integer id, RedirectAttributes redirectAttributes) {
+        try {
+            bookService.deleteBookById(id);
+            redirectAttributes.addFlashAttribute("message", "The book with id=" + id + " has been deleted successfully!");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", e.getMessage());
         }
+
+        return "redirect:/books";
     }
 
-    @PostMapping("/{bookId}/return")
-    public ResponseEntity<Book> returnBook(@PathVariable Book book) {
-        Book returnedBook = bookService.returnBook(book);
-        if (returnedBook != null) {
-            return ResponseEntity.ok(returnedBook);
-        } else {
-            return ResponseEntity.badRequest().build(); // or a more descriptive error response
-        }
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'LIBRARIAN')")
+    @GetMapping("{id}/edit")
+    public String editBook(@PathVariable("id") Integer id, Model model) {
+        var book = bookRepository.findById(Long.valueOf(id)).orElse(null);
+        var works = workRepository.findAll();
+
+        var statusList = new ArrayList<String>();
+        statusList.add(Status.OK.name());
+        statusList.add(Status.LOST.name());
+        statusList.add(Status.DAMAGED.name());
+
+        model.addAttribute("bookPayload", new BookPayload(book.getId(), book.getWork().getId(), book.getPublisherName(), new Date(book.getYearOfPublishing().getTime()), book.getIsbn(), book.getBookStatus().name()));
+        model.addAttribute("worksOptions", works);
+        model.addAttribute("statusOptions", statusList);
+
+        return "book/editBook";
     }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'LIBRARIAN')")
+    @PostMapping("/updateBook")
+    public RedirectView updateBook(@ModelAttribute("bookPayload") BookPayload bookPayload) throws ParseException {
+        var book = bookService.editBook(bookPayload.getId(), bookPayload);
+        bookRepository.save(book);
+
+        return new RedirectView("/books");
+    }
+
 }
