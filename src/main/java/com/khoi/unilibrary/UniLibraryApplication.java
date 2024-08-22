@@ -12,10 +12,4 @@ public class UniLibraryApplication extends WebMvcConfigurationSupport {
 	public static void main(String[] args) {
 		SpringApplication.run(UniLibraryApplication.class, args);
 	}
-
-	@Override
-	protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/static/**")
-				.addResourceLocations(ResourceUtils.CLASSPATH_URL_PREFIX + "/static/");
-	}
 }

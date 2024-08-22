@@ -53,6 +53,37 @@
 			<artifactId>hibernate-validator</artifactId>
 			<version>8.0.1.Final</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>6.6.0.Final</version>
+			<type>pom</type>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-entitymanager</artifactId>
+			<version>5.6.15.Final</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+		<dependency>
+			<groupId>javax.xml.bind</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.4.0-b180830.0359</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.webjars/jquery -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>3.7.1</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>bootstrap</artifactId>
+			<version>5.3.3</version>
+		</dependency>
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
@@ -103,10 +134,23 @@
 			<artifactId>spring-boot-starter-mail</artifactId>
 			<version>3.1.5</version>
 		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-mysql</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<configuration>
+					<url>jdbc:mysql://localhost:3306/unilibrary</url>
+					<user>root</user>
+					<password>191853</password>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
