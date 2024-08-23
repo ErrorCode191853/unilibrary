@@ -57,7 +57,7 @@ public class DataSeedLoader implements CommandLineRunner {
         Set<Role> roles = new HashSet<>();
         roles.add(roleMember);
 
-        var user1 = new User("Huu Khoi", "Nguyen", "$2a$12$3tZr1OLzCU1mojVnwAtBlOOy9WkJNM2Yifbr3iAxVQBFXlqIAlw22", "khoinguyenhuu20@gmail.com", new Timestamp(new SimpleDateFormat("yyyy/MM/dd").parse("2005/07/23").getTime()), "+4444444444", true, roles);
+        var user1 = new User("Khoi", "Huu", "2444666668888888", "huukhoi@gmail.com", new Timestamp(new SimpleDateFormat("yyyy/MM/dd").parse("2000/01/01").getTime()), "+4444444444", true, roles);
 
         var users = new ArrayList<User>();
         users.add(user1);

@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
+@Repository
 public interface BookRepository extends JpaRepository<Book, Long> {
     Page<Book> findAll(Pageable pageable);
 
@@ -18,16 +18,15 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     Page<Book> findByWorkIdAndPublisherNameContainingIgnoreCase(Integer workId, String publisherName, Pageable pageable);
 
-    @Query(value = "SELECT * FROM book b WHERE CAST(b.book_status AS text) = :bookStatus", nativeQuery = true)
+    @Query(value = "SELECT * FROM book b WHERE b.book_status = :bookStatus", nativeQuery = true)
     Page<Book> findBooksByBookStatus(@Param("bookStatus") String bookStatus, Pageable pageable);
 
-    @Query(value = "SELECT * FROM book b WHERE CAST(b.book_status AS text) = :bookStatus AND LOWER(b.publisher_name) LIKE LOWER(CONCAT('%',:publisherName,'%'))", nativeQuery = true)
+    @Query(value = "SELECT * FROM book b WHERE b.book_status = :bookStatus AND LOWER(b.publisher_name) LIKE LOWER(CONCAT('%',:publisherName,'%'))", nativeQuery = true)
     Page<Book> findBooksByBookStatusAndPublisherNameContainingIgnoreCase(@Param("bookStatus") String bookStatus, @Param("publisherName") String publisherName, Pageable pageable);
 
-    @Query(value = "SELECT * FROM book b WHERE b.work_id = :workId AND CAST(b.book_status AS text) = :bookStatus", nativeQuery = true)
+    @Query(value = "SELECT * FROM book b WHERE b.work_id = :workId AND b.book_status = :bookStatus", nativeQuery = true)
     Page<Book> findByWorkIdAndBookStatus(@Param("workId") Integer workId, @Param("bookStatus") String bookStatus, Pageable pageable);
 
-    @Query(value = "SELECT * FROM book b WHERE b.work_id = :workId AND CAST(b.book_status AS text) = :bookStatus AND LOWER(b.publisher_name) LIKE LOWER(CONCAT('%',:publisherName,'%')) OR LOWER(b.isbn) LIKE LOWER(CONCAT('%',:isbn,'%'))", nativeQuery = true)
+    @Query(value = "SELECT * FROM book b WHERE b.work_id = :workId AND b.book_status = :bookStatus AND (LOWER(b.publisher_name) LIKE LOWER(CONCAT('%',:publisherName,'%')) OR LOWER(b.isbn) LIKE LOWER(CONCAT('%',:isbn,'%')))", nativeQuery = true)
     Page<Book> findByWorkIdAndBookStatusAndPublisherNameContainingAndIsbnContainingAllIgnoreCase(@Param("workId") Integer workId, @Param("bookStatus") String bookStatus, @Param("publisherName") String publisherName, @Param("isbn") String isbn, Pageable pageable);
-
 }

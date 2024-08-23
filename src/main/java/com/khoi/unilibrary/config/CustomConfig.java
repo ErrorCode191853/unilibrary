@@ -1,4 +1,4 @@
-package com.khoi.unilibrary;
+package com.khoi.unilibrary.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

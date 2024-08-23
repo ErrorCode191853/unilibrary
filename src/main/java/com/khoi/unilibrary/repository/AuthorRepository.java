@@ -13,6 +13,6 @@ public interface AuthorRepository extends JpaRepository<Author, Integer> {
 
     Page<Author> findByFirstNameContainingOrLastNameContainingAllIgnoreCase(String firstName, String lastName, Pageable pageable);
 
-    @Query(value = "SELECT * FROM author ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM author ORDER BY RAND() LIMIT 1", nativeQuery = true)
     Author getOneRandom();
 }
