@@ -5,6 +5,7 @@ import com.khoi.unilibrary.model.*;
 import com.khoi.unilibrary.model.enums.Status;
 import com.khoi.unilibrary.repository.*;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
@@ -29,18 +30,23 @@ public class DataSeedLoader implements CommandLineRunner {
 
     private final BookRepository bookRepository;
 
+    private final PasswordEncoder passwordEncoder;
+
     public DataSeedLoader(UserRepository userRepository,
                           RoleRepository roleRepository,
                           AuthorRepository authorRepository,
                           CategoryRepository categoryRepository,
                           WorkRepository workRepository,
-                          BookRepository bookRepository) {
+                          BookRepository bookRepository,
+                          PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.authorRepository = authorRepository;
         this.categoryRepository = categoryRepository;
         this.workRepository = workRepository;
         this.bookRepository = bookRepository;
+        this.passwordEncoder = passwordEncoder;
+
     }
 
     @Override
@@ -50,6 +56,7 @@ public class DataSeedLoader implements CommandLineRunner {
         loadCategoryData();
         loadWorkData();
         loadBookData();
+        createAdminUser();
     }
 
     private void loadUserData() throws ParseException {
@@ -57,9 +64,10 @@ public class DataSeedLoader implements CommandLineRunner {
         Set<Role> roles = new HashSet<>();
         roles.add(roleMember);
 
-        var user1 = new User("Khoi",
-                "Huu",
-                "2444666668888888",
+        var user1 = new User("First Name",
+                "Last Name",
+                "First Name Last Name",
+                "1234567890",
                 "huukhoi@gmail.com",
                 new Timestamp(new SimpleDateFormat("yyyy/MM/dd")
                         .parse("2000/01/01")
@@ -76,6 +84,28 @@ public class DataSeedLoader implements CommandLineRunner {
                 System.out.println("Email " + user.getEmail() + " not found, creating user");
                 userRepository.save(user);
             }
+        }
+    }
+
+    private void createAdminUser() throws ParseException{
+        if (userRepository.findByEmail("admin@example.com") == null) {
+            Role adminRole = roleRepository.findByName("ADMIN");
+
+            User adminUser = new User();
+            adminUser.setFirstName("Admin");
+            adminUser.setLastName("User");
+            adminUser.setUserName("admin");
+            adminUser.setContactNumber("0963538743");
+            adminUser.setDateOfBirth(new Timestamp(new SimpleDateFormat("yyyy/MM/dd").parse("2005/07/23").getTime()));
+            adminUser.setPassword(passwordEncoder.encode("adminpassword"));
+            adminUser.setEmail("admin@example.com");
+            adminUser.setEnabled(true);
+
+            Set<Role> roles = new HashSet<>();
+            roles.add(adminRole);
+            adminUser.setRoles(roles);
+
+            userRepository.save(adminUser);
         }
     }
 

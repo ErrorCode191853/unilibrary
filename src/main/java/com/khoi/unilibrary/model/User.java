@@ -32,6 +32,10 @@ public class User {
     @NotNull(message = "last_name shouldn't be null")
     private String lastName;
 
+    @Column(name = "user_name")
+    @NotNull(message = "user_name shouldn't be null")
+    private String userName;
+
     @Column(name = "password")
     @NotNull(message = "password shouldn't be null")
     private String password;
@@ -59,9 +63,10 @@ public class User {
     )
     private Set<Role> roles = new HashSet<>();
 
-    public User(String firstName, String lastName, String password, String email, Timestamp dateOfBirth, String contactNumber, boolean enabled, Set<Role> roles) {
+    public User(String firstName, String lastName, String userName, String password, String email, Timestamp dateOfBirth, String contactNumber, boolean enabled, Set<Role> roles) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.userName = userName;
         this.password = password;
         this.email = email;
         this.dateOfBirth = dateOfBirth;
