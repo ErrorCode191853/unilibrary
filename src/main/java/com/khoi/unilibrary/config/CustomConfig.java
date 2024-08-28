@@ -13,7 +13,7 @@ public class CustomConfig implements WebMvcConfigurer {
     public ClassLoaderTemplateResolver yourTemplateResolver() {
         ClassLoaderTemplateResolver configurer = new ClassLoaderTemplateResolver();
 
-        configurer.setPrefix("customLocation/");
+        configurer.setPrefix("static/");
         configurer.setSuffix(".html");
         configurer.setTemplateMode(TemplateMode.HTML);
         configurer.setCharacterEncoding("UTF-8");

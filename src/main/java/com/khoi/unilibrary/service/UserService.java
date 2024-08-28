@@ -2,6 +2,7 @@ package com.khoi.unilibrary.service;
 
 import com.khoi.unilibrary.dto.UserPayload;
 import com.khoi.unilibrary.model.User;
+import com.khoi.unilibrary.token.PasswordResetToken;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.Authentication;
 import java.text.ParseException;
@@ -23,5 +24,12 @@ public interface UserService {
 
     User findByEmail(String email);
 
+    void sendPasswordResetEmail(String email, String resetUrl);
+
+    String createPasswordResetToken(String email);
+
+    PasswordResetToken getPasswordResetToken(String token);
+
+    User saveUser(User user);
 }
 

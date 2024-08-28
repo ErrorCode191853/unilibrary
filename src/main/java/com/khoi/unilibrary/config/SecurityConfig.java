@@ -27,8 +27,7 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .successHandler(mySuccessHandler())  // Custom success handler
-                        .permitAll()
+                        .defaultSuccessUrl("/index.html", true)  // Custom success handler
                 )
                 .logout(logout -> logout.permitAll());
 
